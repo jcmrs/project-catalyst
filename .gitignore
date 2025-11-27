@@ -1,0 +1,82 @@
+# Project Catalyst - Git Ignore File
+
+# Node modules (if using npm for tooling)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Test coverage
+coverage/
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Build artifacts
+*.o
+*.a
+*.dylib
+*.dll
+*.exe
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+.cache/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+*.secret
+
+# Local development
+.catalyst/
+.local/
+*.local
+
+# CI/CD artifacts
+.github/workflows/.secrets
+
+# Plugin-specific
+.mcp.json.local
+plugin.json.local
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Documentation build artifacts
+docs/_build/
+site/
