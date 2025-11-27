@@ -1,0 +1,53 @@
+---
+id: github-actions-ci-test
+version: 1.0.0
+category: ci-cd
+description: GitHub Actions workflow for running tests on push and pull requests
+language: yaml
+dependencies: []
+variables:
+  - name: NODE_VERSION
+    description: Node.js version for testing (e.g., "18", "20")
+    required: false
+    default: "20"
+  - name: TEST_COMMAND
+    description: Command to run tests (e.g., "npm test", "pytest", "cargo test")
+    required: true
+---
+
+name: CI - Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '${NODE_VERSION}'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: ${TEST_COMMAND}
+
+      - name: Upload coverage
+        if: always()
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/coverage-final.json
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false

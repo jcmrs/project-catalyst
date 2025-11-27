@@ -1,0 +1,58 @@
+---
+id: github-actions-build
+version: 1.0.0
+category: ci-cd
+description: GitHub Actions workflow for building and packaging the project
+language: yaml
+dependencies: []
+variables:
+  - name: NODE_VERSION
+    description: Node.js version for building
+    required: false
+    default: "20"
+  - name: BUILD_COMMAND
+    description: Command to run build
+    required: true
+---
+
+name: CI - Build
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '${NODE_VERSION}'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: ${BUILD_COMMAND}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: |
+            dist/
+            build/
+          retention-days: 7
+
+      - name: Check build size
+        run: |
+          echo "📦 Build Size Report:"
+          du -sh dist/ build/ 2>/dev/null || echo "No build directories found"
