@@ -2,6 +2,12 @@
 
 Analyze the current project structure to detect missing utilities, configuration files, and best practices. Provides intelligent recommendations for templates and improvements.
 
+Execute the project analyzer:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/skills/project-analyzer/scripts/analyze.sh" "${CLAUDE_PROJECT_DIR}"
+```
+
 ## What This Command Does
 
 1. **Scans project structure** for common files and patterns

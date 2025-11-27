@@ -2,6 +2,12 @@
 
 Interactive onboarding wizard for setting up a new project with Project Catalyst. Asks questions about your project and applies appropriate templates automatically.
 
+Execute the setup wizard:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/setup-wizard.sh"
+```
+
 ## What This Command Does
 
 1. **Asks questions** about your project (language, type, goals)

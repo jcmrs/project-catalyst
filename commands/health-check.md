@@ -2,6 +2,12 @@
 
 Perform a quick health assessment of your project setup. Provides a scorecard of essential project utilities and configuration quality.
 
+Execute the health check script and display the results:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/health-check.sh"
+```
+
 ## What This Command Does
 
 1. **Quick scan** of essential project files (< 5 seconds)
