@@ -1,6 +1,6 @@
 {
   "name": "project-catalyst",
-  "version": "0.1.0",
+  "version": "1.0.0-rc1",
   "description": "Language-agnostic project utilities with AI-powered analysis. Provides 40+ production-ready templates and intelligent project pattern detection for Claude Code.",
   "author": {
     "name": "jcmrs",
@@ -22,7 +22,6 @@
   ],
   "commands": ["./commands/"],
   "hooks": "./hooks/hooks.json",
-  "mcpServers": "./.mcp.json",
   "engines": {
     "claude-code": ">=1.0.0"
   },
@@ -34,5 +33,5 @@
   "main": "./skills/project-analyzer/SKILL.md",
   "icon": "🚀",
   "preview": false,
-  "experimental": true
+  "experimental": false
 }
