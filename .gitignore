@@ -80,3 +80,13 @@ Thumbs.db
 # Documentation build artifacts
 docs/_build/
 site/
+
+# Python virtual environment (project-local)
+venv/
+__pycache__/
+*.pyc
+
+# Test artifacts
+.pytest_cache/
+htmlcov/
+.coverage

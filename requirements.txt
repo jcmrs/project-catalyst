@@ -1,0 +1,15 @@
+# Project Catalyst - Python Dependencies
+# Phase 3: Project Analyzer Skill
+#
+# Installation:
+#   python -m venv venv
+#   venv\Scripts\activate  (Windows)
+#   source venv/bin/activate  (Unix/Mac)
+#   pip install -r requirements.txt
+
+# Core Dependencies
+PyYAML>=6.0.1  # YAML parsing for detection patterns
+
+# Development Dependencies (for testing)
+pytest>=7.4.0  # Testing framework
+pytest-cov>=4.1.0  # Code coverage
