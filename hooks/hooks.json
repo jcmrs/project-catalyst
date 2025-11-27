@@ -1,0 +1,41 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "**",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/check-analyzed.sh",
+            "description": "Check if project has been analyzed and suggest running analyzer"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/validate-template.sh",
+            "args": ["${FILE_PATH}"],
+            "description": "Validate template files after they are written"
+          }
+        ]
+      }
+    ],
+    "PreCommit": [
+      {
+        "matcher": "**",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/validate-isolation.sh",
+            "description": "Verify all local-memory operations use proper isolation"
+          }
+        ]
+      }
+    ]
+  }
+}

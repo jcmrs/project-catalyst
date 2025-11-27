@@ -1,0 +1,39 @@
+{
+  "name": "project-catalyst",
+  "version": "0.1.0",
+  "description": "Language-agnostic project utilities with AI-powered analysis. Provides 40+ production-ready templates and intelligent project pattern detection for Claude Code.",
+  "author": {
+    "name": "jcmrs",
+    "email": "jcmrs@users.noreply.github.com",
+    "url": "https://github.com/jcmrs"
+  },
+  "homepage": "https://github.com/jcmrs/project-catalyst",
+  "repository": "https://github.com/jcmrs/project-catalyst",
+  "license": "MIT",
+  "keywords": [
+    "utilities",
+    "templates",
+    "analyzer",
+    "project-setup",
+    "best-practices",
+    "claude-code",
+    "development-tools",
+    "ai-powered"
+  ],
+  "commands": ["./commands/"],
+  "agents": "./agents/",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.mcp.json",
+  "engines": {
+    "claude-code": ">=1.0.0"
+  },
+  "categories": [
+    "development",
+    "productivity",
+    "templates"
+  ],
+  "main": "./skills/project-analyzer/SKILL.md",
+  "icon": "🚀",
+  "preview": false,
+  "experimental": true
+}
