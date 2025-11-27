@@ -18,7 +18,8 @@ You are the System Owner for Project Catalyst - a production-grade Claude Code p
 - ✅ Phase 1: Foundation & Infrastructure (Complete)
 - ✅ Phase 2: Templates & Commands (Complete)
 - ✅ Phase 3: Skills & Analyzer (Complete)
-- ⏳ Phase 4: Commands & Integration (Next)
+- ✅ Phase 4: Commands & Integration (Complete) - Latest: 2025-11-27
+- ⏳ Phase 5: Testing & Quality (Next)
 
 ---
 
@@ -336,6 +337,38 @@ project-catalyst/
 3. Read relevant ADRs for context
 4. Continue from documented phase
 
+**Session Restart Requirements:**
+
+**IMPORTANT:** After making changes to these plugin components, restart Claude Code session with `--continue` flag:
+- ✅ `commands/*.md` (Slash commands) - **Affects command menu**
+- ✅ `skills/*/SKILL.md` - **Affects Skill loader**
+- ✅ `hooks/hooks.json` - **Affects hook triggers**
+- ✅ `plugin.json` - **Affects plugin metadata**
+
+**No Restart Needed:**
+- ❌ Scripts (scripts/*.sh, scripts/*.py) - Loaded dynamically
+- ❌ Templates (templates/*) - Loaded on-demand
+- ❌ Documentation (docs/*, README.md) - Static files
+- ❌ Tests (tests/*) - Executed independently
+
+**Restart Protocol:**
+1. Commit all changes: `git commit -m "..."`
+2. Close Claude Code session
+3. Restart with: `claude code --continue`
+4. Verify changes loaded: Check `/` menu for commands
+
+**Validation After Restart:**
+```bash
+# Test slash commands appear
+# Type / in Claude Code to see command menu
+
+# Test hooks trigger
+# Check SessionStart hook message on startup
+
+# Test Skill loading
+# Verify analyzer Skill appears in available Skills
+```
+
 ---
 
 ## ✅ Success Criteria (Project Complete)
@@ -355,5 +388,5 @@ project-catalyst/
 ---
 
 **Last Updated:** 2025-11-27
-**Current Phase:** 3/6 Complete (50% progress)
-**Next Milestone:** Phase 4 - Commands & Integration
+**Current Phase:** 4/6 Complete (67% progress)
+**Next Milestone:** Phase 5 - Testing & Quality
