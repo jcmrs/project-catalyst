@@ -1,0 +1,197 @@
+# Detection Patterns for Project Analyzer
+# Version: 1.0.0
+# Phase: 1 (Rule-Based Detection)
+
+patterns:
+  # Git Configuration Patterns
+  - id: missing-gitignore
+    type: file_absence
+    check: .gitignore
+    confidence: high
+    severity: medium
+    recommendation:
+      template: git/gitignore
+      reason: "Prevents accidental commits of sensitive files (secrets, dependencies, build artifacts)"
+      variants:
+        - condition: "package.json exists"
+          template: git/gitignore/node
+        - condition: "requirements.txt or setup.py exists"
+          template: git/gitignore/python
+        - condition: "pom.xml or build.gradle exists"
+          template: git/gitignore/java
+
+  - id: missing-ci-workflow
+    type: directory_absence
+    check:
+      - .github/workflows
+      - .gitlab-ci.yml
+      - .circleci/config.yml
+      - azure-pipelines.yml
+    confidence: high
+    severity: high
+    recommendation:
+      template: ci-cd/github-actions/ci-test
+      reason: "Automated testing improves code quality and catches bugs early"
+
+  - id: missing-git-hooks
+    type: directory_absence
+    check: .git/hooks
+    confidence: medium
+    severity: low
+    recommendation:
+      template: git/hooks/pre-commit
+      reason: "Pre-commit hooks enforce code quality before commits"
+
+  # Documentation Patterns
+  - id: missing-readme
+    type: file_absence
+    check: README.md
+    confidence: high
+    severity: high
+    recommendation:
+      template: documentation/README-comprehensive
+      reason: "README is essential for project understanding and adoption"
+
+  - id: readme-minimal
+    type: file_quality
+    check: README.md
+    criteria:
+      min_lines: 50
+      required_sections:
+        - Installation
+        - Usage
+    confidence: medium
+    severity: low
+    recommendation:
+      template: documentation/README-comprehensive
+      reason: "Comprehensive documentation improves project adoption"
+
+  - id: missing-contributing
+    type: file_absence
+    check: CONTRIBUTING.md
+    confidence: high
+    severity: low
+    recommendation:
+      template: documentation/CONTRIBUTING
+      reason: "Contribution guidelines help maintain project quality"
+
+  - id: missing-license
+    type: file_absence
+    check: LICENSE
+    confidence: high
+    severity: high
+    recommendation:
+      template: setup/licenses/MIT
+      reason: "Legal protection and clear usage terms are essential for open source"
+
+  # CI/CD Patterns
+  - id: missing-build-workflow
+    type: file_absence
+    check: .github/workflows/build.yml
+    confidence: medium
+    severity: medium
+    recommendation:
+      template: ci-cd/github-actions/build
+      reason: "Automated builds ensure code compiles successfully"
+
+  - id: missing-release-workflow
+    type: file_absence
+    check: .github/workflows/release.yml
+    confidence: medium
+    severity: low
+    recommendation:
+      template: ci-cd/github-actions/release
+      reason: "Automated releases streamline deployment process"
+
+  - id: missing-dockerfile
+    type: file_absence
+    check: Dockerfile
+    confidence: low
+    severity: low
+    recommendation:
+      template: ci-cd/docker/Dockerfile
+      reason: "Containerization improves deployment consistency"
+
+  # Code Quality Patterns
+  - id: missing-eslint
+    type: file_absence
+    check:
+      - .eslintrc.js
+      - .eslintrc.json
+      - eslint.config.js
+    confidence: medium
+    severity: medium
+    recommendation:
+      template: quality/linting/eslint.config
+      reason: "Linting catches common errors and enforces code style"
+    applies_when: "package.json exists"
+
+  - id: missing-prettier
+    type: file_absence
+    check:
+      - .prettierrc
+      - .prettierrc.json
+      - prettier.config.js
+    confidence: medium
+    severity: low
+    recommendation:
+      template: quality/formatting/.prettierrc
+      reason: "Consistent code formatting improves readability"
+    applies_when: "package.json exists"
+
+  # Setup Patterns
+  - id: missing-editorconfig
+    type: file_absence
+    check: .editorconfig
+    confidence: high
+    severity: low
+    recommendation:
+      template: setup/editorconfig/.editorconfig
+      reason: "Consistent editor settings across team members"
+
+# Confidence Scoring Rules
+scoring:
+  high:
+    weight: 1.0
+    conditions:
+      - file_exists: exact match
+      - directory_exists: exact match
+    description: "Direct evidence (file/directory present or absent)"
+
+  medium:
+    weight: 0.7
+    conditions:
+      - file_quality: threshold met
+      - pattern_match: 70%+
+    description: "Quality metrics and strong pattern matches"
+
+  low:
+    weight: 0.4
+    conditions:
+      - file_quality: partial match
+      - pattern_match: 40-70%
+    description: "Fuzzy matching and heuristics"
+
+# Severity Definitions
+severity:
+  high:
+    priority: 1
+    description: "Critical gaps that should be addressed immediately"
+    examples:
+      - Missing LICENSE (legal risk)
+      - Missing README (adoption barrier)
+      - No CI/CD (quality risk)
+
+  medium:
+    priority: 2
+    description: "Important but not blocking"
+    examples:
+      - Missing .gitignore (accidental commits risk)
+      - Missing linter (code quality)
+
+  low:
+    priority: 3
+    description: "Nice-to-have improvements"
+    examples:
+      - Missing .editorconfig (convenience)
+      - Missing CONTRIBUTING.md (open source best practice)

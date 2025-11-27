@@ -1,0 +1,172 @@
+# Confidence Scoring Configuration
+# Version: 1.0.0
+# Phase: 1 (Rule-Based)
+
+# Scoring Rules
+scoring_rules:
+  high_confidence:
+    weight: 1.0
+    threshold: 0.9
+    conditions:
+      - type: file_exists
+        description: "File exists or doesn't exist (binary check)"
+      - type: directory_exists
+        description: "Directory exists or doesn't exist (binary check)"
+      - type: exact_match
+        description: "Exact string or pattern match"
+    examples:
+      - "README.md exists: YES"
+      - ".gitignore exists: NO"
+      - "LICENSE file present: YES"
+
+  medium_confidence:
+    weight: 0.7
+    threshold: 0.7
+    conditions:
+      - type: file_quality
+        description: "File meets quality thresholds"
+      - type: pattern_strength
+        description: "Strong pattern match (70%+ similarity)"
+      - type: heuristic_match
+        description: "Multiple weak signals combined"
+    examples:
+      - "README.md has 30 lines (threshold: 50)"
+      - "Package.json indicates Node.js project"
+      - "Multiple test files suggest test setup"
+
+  low_confidence:
+    weight: 0.4
+    threshold: 0.4
+    conditions:
+      - type: fuzzy_match
+        description: "Partial pattern match (40-70% similarity)"
+      - type: inference
+        description: "Inferred from indirect evidence"
+      - type: assumption
+        description: "Based on common conventions"
+    examples:
+      - "Similar filename pattern detected"
+      - "Assumed from project structure"
+      - "Common convention but not verified"
+
+# Quality Thresholds
+quality_thresholds:
+  readme:
+    min_lines: 50
+    required_sections:
+      - "Installation"
+      - "Usage"
+      - "License"
+    optional_sections:
+      - "Contributing"
+      - "Testing"
+      - "API Documentation"
+    confidence_boost: 0.2  # +20% if all required sections present
+
+  gitignore:
+    min_patterns: 10
+    language_specific:
+      node: ["node_modules/", "dist/", ".env"]
+      python: ["__pycache__/", "*.pyc", "venv/"]
+      java: ["*.class", "target/", "*.jar"]
+    confidence_boost: 0.15  # +15% if language patterns detected
+
+  ci_workflow:
+    min_jobs: 1
+    required_triggers:
+      - "push"
+      - "pull_request"
+    recommended_actions:
+      - "checkout"
+      - "setup"
+      - "test"
+    confidence_boost: 0.1  # +10% if follows best practices
+
+# Detection Type Confidence Mapping
+detection_types:
+  file_absence:
+    base_confidence: high
+    description: "Checking if file exists is deterministic"
+    examples:
+      - "LICENSE file missing"
+      - ".gitignore not found"
+
+  directory_absence:
+    base_confidence: high
+    description: "Checking if directory exists is deterministic"
+    examples:
+      - ".github/workflows/ missing"
+      - "tests/ directory not found"
+
+  file_quality:
+    base_confidence: medium
+    description: "Quality assessment involves thresholds"
+    examples:
+      - "README.md too short"
+      - "Insufficient test coverage"
+
+  pattern_match:
+    base_confidence: low
+    description: "Pattern matching can have false positives"
+    examples:
+      - "Likely uses React (inferred from dependencies)"
+      - "Possibly a CLI tool (inferred from structure)"
+
+# Confidence Calculation
+calculation:
+  formula: |
+    confidence = base_confidence × scoring_weight × quality_boost
+
+    where:
+      base_confidence = detection_type confidence (0.4, 0.7, or 1.0)
+      scoring_weight = confidence level weight (0.4, 0.7, or 1.0)
+      quality_boost = 1.0 + (sum of all applicable boosts)
+
+  examples:
+    - name: "Missing .gitignore (high confidence)"
+      calculation: "1.0 × 1.0 × 1.0 = 1.0 (100%)"
+
+    - name: "README.md minimal (medium confidence)"
+      calculation: "0.7 × 1.0 × 1.0 = 0.7 (70%)"
+
+    - name: "Inferred Node.js project (low confidence)"
+      calculation: "0.4 × 1.0 × 1.0 = 0.4 (40%)"
+
+# Severity to Priority Mapping
+severity_priority:
+  high:
+    priority_score: 10
+    multiplier: 1.0
+    description: "Critical issues that should be addressed immediately"
+
+  medium:
+    priority_score: 5
+    multiplier: 0.6
+    description: "Important but not blocking"
+
+  low:
+    priority_score: 2
+    multiplier: 0.3
+    description: "Nice-to-have improvements"
+
+# Final Recommendation Score
+recommendation_score:
+  formula: |
+    score = confidence × severity_multiplier × priority_score
+
+  interpretation:
+    - range: [8.0, 10.0]
+      label: "Critical"
+      action: "Should apply immediately"
+
+    - range: [5.0, 7.9]
+      label: "Important"
+      action: "Should apply soon"
+
+    - range: [2.0, 4.9]
+      label: "Recommended"
+      action: "Consider applying"
+
+    - range: [0.0, 1.9]
+      label: "Optional"
+      action: "Apply if desired"
